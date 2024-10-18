@@ -6,7 +6,8 @@ import WeatherDisplay from './WeatherDisplay';
 import Loader from './Loader';
 import ErrorHandling from './ErrorHandling';
 import ForecastDisplay from './ForecastDisplay';
-import { Fade, ButtonGroup, Button, Box } from '@mui/material';
+import HourlyForecast from './HourlyForecast'; // Import HourlyForecast
+import { Fade, ButtonGroup, Button, Box, ToggleButtonGroup, ToggleButton } from '@mui/material';
 
 const Weather = () => {
   const [city, setCity] = useState('');
@@ -15,6 +16,7 @@ const Weather = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [units, setUnits] = useState('metric'); // metric for Celsius, imperial for Fahrenheit
+  const [forecastType, setForecastType] = useState('hourly'); // New state for forecast toggle
 
   const fetchWeather = useCallback(async () => {
     // Don't fetch weather if city or countryCode is empty
@@ -35,15 +37,20 @@ const Weather = () => {
     setLoading(false);
   }, [city, countryCode, units]);
 
-  // Now include 'city' and 'countryCode' in the dependency array to fix the warning
   useEffect(() => {
     if (city && countryCode) {
       fetchWeather(); // Fetch weather for the default city on mount if both city and country are present
     }
-  }, [city, countryCode, fetchWeather]);
+  }, [fetchWeather]);
 
   const handleUnitChange = (newUnit) => {
     setUnits(newUnit);
+  };
+
+  const handleForecastToggle = (event, newType) => {
+    if (newType) {
+      setForecastType(newType); // Toggle between 'hourly' and 'daily'
+    }
   };
 
   return (
@@ -60,14 +67,36 @@ const Weather = () => {
           </Button>
         </ButtonGroup>
       </Box>
+
+      <Box mt={2}>
+        <ToggleButtonGroup
+          value={forecastType}
+          exclusive
+          onChange={handleForecastToggle}
+          aria-label="forecast toggle"
+        >
+          <ToggleButton value="hourly" aria-label="hourly forecast">
+            24-Hour Forecast
+          </ToggleButton>
+          <ToggleButton value="daily" aria-label="5-day forecast">
+            5-Day Forecast
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </Box>
+
       <ErrorHandling error={error} />
       {loading ? (
         <Loader />
       ) : (
         <Fade in={!loading} timeout={1000}>
           <div>
-            <WeatherDisplay weather={weatherData?.current} units={units} />
-            <ForecastDisplay forecast={weatherData?.forecast} units={units} />
+            <WeatherDisplay weather={weatherData?.list[0]} city={city} countryCode={countryCode} units={units} /> {/* Display current weather */}
+            
+            {forecastType === 'hourly' ? (
+              <HourlyForecast hourly={weatherData?.list} units={units} /> // 24-hour forecast
+            ) : (
+              <ForecastDisplay forecast={weatherData?.list} units={units} /> // 5-day forecast
+            )}
           </div>
         </Fade>
       )}
