@@ -54,28 +54,7 @@ bash
 │   └── workflows
 │       └── ci.yml               # CI/CD pipeline using GitHub Actions
 └── package.json                 # Project dependencies and scripts
-'''
-├── public
-│   └── index.html
-├── src
-│   ├── api
-│       └── weatherApi.js        # API calls using Axios
-│   ├── components
-│       ├── Weather.js           # Main component handling state and layout
-│       ├── WeatherDisplay.js     # Displays current weather data
-│       ├── ForecastDisplay.js    # Displays 5-day forecast
-│       ├── HourlyForecast.js     # Displays 24-hour forecast
-│       ├── SearchBar.js          # Search bar with autocomplete for cities
-│       ├── ErrorHandling.js      # Displays error messages
-│       └── Loader.js            # Loading spinner while fetching data
-│   ├── App.js                   # Root app component
-│   ├── App.css                  # General styles
-│   ├── index.js                 # Entry point for React app
-│   └── index.css                # General styles
-├── .github
-│   └── workflows
-│       └── ci.yml                # CI/CD pipeline using GitHub Actions
-└── package.json                # Project dependencies and scripts
+
 
 
 
