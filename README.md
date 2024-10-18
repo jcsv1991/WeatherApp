@@ -1,5 +1,4 @@
-# WeatherApp
-  a dynamic and visually appealing Weather Forecasting App using the OpenWeatherMap API and the React framework
+
 # Weather Forecasting App
 
 A dynamic and visually appealing weather forecasting application built with React that uses the OpenWeatherMap API to display current, 5-day, and 24-hour forecasts.
