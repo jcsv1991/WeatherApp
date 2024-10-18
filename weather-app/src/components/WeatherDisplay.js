@@ -1,19 +1,18 @@
 // src/components/WeatherDisplay.js
 import React from 'react';
-import { Box, Card, CardContent, Typography } from '@mui/material';
+import { Box, Typography, Card, CardContent } from '@mui/material';
 
-const WeatherDisplay = ({ weather, units }) => {
+const WeatherDisplay = ({ weather, city, countryCode, units }) => {
   if (!weather) return null;
 
-  // Determine unit label (°C or °F)
   const tempUnit = units === 'metric' ? '°C' : '°F';
 
   return (
-    <Box display="flex" justifyContent="center" mt={3}>
-      <Card sx={{ minWidth: 275, padding: 2 }}>
+    <Box mt={3} textAlign="center" display="flex" justifyContent="center">
+      <Card sx={{ maxWidth: 345, textAlign: 'center' }}> {/* Card around the content */}
         <CardContent>
-          <Typography variant="h4" gutterBottom>
-            {weather.name}, {weather.sys.country}
+          <Typography variant="h4">
+            {city}, {countryCode}
           </Typography>
           <Typography variant="h6">{weather.weather[0].description}</Typography>
           <Typography variant="h5">
@@ -22,6 +21,7 @@ const WeatherDisplay = ({ weather, units }) => {
           <img
             src={`http://openweathermap.org/img/wn/${weather.weather[0].icon}.png`}
             alt="weather icon"
+            style={{ marginTop: 16 }}
           />
         </CardContent>
       </Card>
