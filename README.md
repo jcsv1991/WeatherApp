@@ -2,7 +2,7 @@
 # Weather Forecasting App
 
 A dynamic and visually appealing weather forecasting application built with React that uses the OpenWeatherMap API to display current, 5-day, and 24-hour forecasts.
-Important: This project requires you to use the fullyfunctionalextrafeatures branch to get all the advanced functionality like switching between 5-day and 24-hour forecasts.
+**Important: This project requires you to use the fullyfunctionalextrafeatures branch to get all the advanced functionality like switching between 5-day and 24-hour forecasts.**
 
 ## Table of Contents
 - [Features](#features)
