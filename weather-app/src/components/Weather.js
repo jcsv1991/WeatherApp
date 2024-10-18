@@ -6,7 +6,7 @@ import WeatherDisplay from './WeatherDisplay';
 import Loader from './Loader';
 import ErrorHandling from './ErrorHandling';
 import ForecastDisplay from './ForecastDisplay';
-import HourlyForecast from './HourlyForecast'; // Import HourlyForecast
+import HourlyForecast from './HourlyForecast';
 import { Fade, ButtonGroup, Button, Box, ToggleButtonGroup, ToggleButton } from '@mui/material';
 
 const Weather = () => {
@@ -27,7 +27,7 @@ const Weather = () => {
 
     setLoading(true);
     setError(''); // Reset error before making the API call
-    const data = await getWeather(city, countryCode, units); // Pass countryCode
+    const data = await getWeather(city, countryCode, units); // Pass units when fetching
     if (data) {
       setWeatherData(data);
       setError(''); // Clear the error after successful fetch
@@ -35,16 +35,17 @@ const Weather = () => {
       setError('Unable to fetch weather data. Please try again.');
     }
     setLoading(false);
-  }, [city, countryCode, units]);
+  }, [city, countryCode, units]); // Re-fetch when units change
 
   useEffect(() => {
     if (city && countryCode) {
-      fetchWeather(); // Fetch weather for the default city on mount if both city and country are present
+      fetchWeather(); // Fetch weather for the selected city on mount
     }
-  }, [fetchWeather]);
+  }, [fetchWeather, city, countryCode]);
 
   const handleUnitChange = (newUnit) => {
-    setUnits(newUnit);
+    setUnits(newUnit); // Update units when switching
+    fetchWeather(); // Refetch weather data after unit change
   };
 
   const handleForecastToggle = (event, newType) => {
@@ -56,7 +57,13 @@ const Weather = () => {
   return (
     <div>
       <h1>Weather Forecast</h1>
-      <SearchBar setCity={setCity} setCountryCode={setCountryCode} fetchWeather={fetchWeather} setError={setError} />
+      <SearchBar
+        setCity={setCity}
+        setCountryCode={setCountryCode}
+        fetchWeather={fetchWeather}
+        setError={setError}
+        setWeatherData={setWeatherData} // Pass setWeatherData to SearchBar
+      />
       <Box mt={2}>
         <ButtonGroup>
           <Button onClick={() => handleUnitChange('metric')} variant={units === 'metric' ? 'contained' : 'outlined'}>
@@ -90,12 +97,15 @@ const Weather = () => {
       ) : (
         <Fade in={!loading} timeout={1000}>
           <div>
-            <WeatherDisplay weather={weatherData?.list[0]} city={city} countryCode={countryCode} units={units} /> {/* Display current weather */}
-            
-            {forecastType === 'hourly' ? (
-              <HourlyForecast hourly={weatherData?.list} units={units} /> // 24-hour forecast
-            ) : (
-              <ForecastDisplay forecast={weatherData?.list} units={units} /> // 5-day forecast
+            {weatherData && (
+              <>
+                <WeatherDisplay weather={weatherData?.list[0]} city={city} countryCode={countryCode} units={units} /> {/* Display current weather */}
+                {forecastType === 'hourly' ? (
+                  <HourlyForecast hourly={weatherData?.list} units={units} /> // 24-hour forecast
+                ) : (
+                  <ForecastDisplay forecast={weatherData?.list} units={units} /> // 5-day forecast
+                )}
+              </>
             )}
           </div>
         </Fade>

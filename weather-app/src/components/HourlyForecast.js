@@ -3,28 +3,27 @@ import React from 'react';
 import { Box, Card, CardContent, Typography } from '@mui/material';
 
 const HourlyForecast = ({ hourly, units }) => {
-  if (!hourly || hourly.length === 0) return null;
-
-  // Extract the next 8 intervals (each representing a 3-hour period)
-  const next24Hours = hourly.slice(0, 8);
   const tempUnit = units === 'metric' ? '°C' : '°F';
 
+  // Filter out the first 8 items to represent the next 24 hours
+  const hourlyData = hourly.slice(0, 8);
+
   return (
-    <Box mt={3} display="flex" flexWrap="wrap" justifyContent="center" gap={2}>
-      {next24Hours.map((hourData, index) => (
-        <Card key={index} sx={{ minWidth: 150, textAlign: 'center' }}>
+    <Box display="flex" justifyContent="center" mt={2}>
+      {hourlyData.map((hour, index) => (
+        <Card key={index} sx={{ minWidth: 100, textAlign: 'center', margin: 1 }}>
           <CardContent>
             <Typography variant="h6">
-              {new Date(hourData.dt * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              {new Date(hour.dt * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </Typography>
+            <Typography variant="body1">
+              Temp: {hour.main.temp}{tempUnit}
+            </Typography>
+            <Typography variant="body2">{hour.weather[0].description}</Typography>
             <img
-              src={`http://openweathermap.org/img/wn/${hourData.weather[0].icon}.png`}
+              src={`http://openweathermap.org/img/wn/${hour.weather[0].icon}.png`}
               alt="weather icon"
             />
-            <Typography variant="body1">
-              Temp: {hourData.main.temp}{tempUnit}
-            </Typography>
-            <Typography variant="body2">{hourData.weather[0].description}</Typography>
           </CardContent>
         </Card>
       ))}

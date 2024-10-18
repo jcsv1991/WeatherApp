@@ -6,7 +6,7 @@ import axios from 'axios';
 const GEOCODING_URL = 'http://api.openweathermap.org/geo/1.0/direct';
 const API_KEY = '9c254e7ed6ff0c89bf7252f6068a5bd2'; // Replace with your actual API key
 
-const SearchBar = ({ setCity, setCountryCode, fetchWeather, setError }) => {
+const SearchBar = ({ setCity, setCountryCode, fetchWeather, setError, setWeatherData }) => { // Add setWeatherData prop
   const [input, setInput] = useState('');
   const [suggestions, setSuggestions] = useState([]);
 
@@ -18,6 +18,9 @@ const SearchBar = ({ setCity, setCountryCode, fetchWeather, setError }) => {
     if (!inputValue || inputValue.trim() === '') {
       setSuggestions([]); // Clear suggestions when input is empty
       setError(''); // Clear any existing errors
+      setCity(''); // Clear city when input is cleared
+      setCountryCode(''); // Clear countryCode when input is cleared
+      setWeatherData(null); // Clear weather data when input is cleared
       return;
     }
 
@@ -52,6 +55,7 @@ const SearchBar = ({ setCity, setCountryCode, fetchWeather, setError }) => {
     } else {
       setCity(''); // Reset city if selection is cleared
       setCountryCode(''); // Reset country code
+      setWeatherData(null); // Clear weather data when no city is selected
     }
   };
 
